@@ -87,4 +87,32 @@ const updateProduct = async (req: Request, res: Response): Promise<any> => {
   }
 }
 
-export { getAllProducts, addNewProduct, deleteProduct, updateProduct }
+const searchProductsByName = async (req: Request, res: Response): Promise<any> => {
+  const nombre = req.query.name as string
+
+  if (!nombre) {
+    return res.status(400).json({
+      success: false,
+      message: "Debes proporcionar un nombre para buscar"
+    })
+  }
+
+  try {
+    const products = await Product.find({ name: { $regex: nombre, $options: 'i' } })
+
+    res.json({
+      success: true,
+      message: `Se encontraron ${products.length} productos`,
+      data: products
+    })
+  } catch (error) {
+    const err = error as Error
+    res.status(500).json({
+      success: false,
+      message: err.message
+    })
+  }
+}
+
+
+export { getAllProducts, addNewProduct, deleteProduct, updateProduct, searchProductsByName }

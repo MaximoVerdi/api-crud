@@ -9,7 +9,7 @@ import { protect } from "./middleware/auth"
 
 process.loadEnvFile()
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 1234
 
 const app = express()
 // permitiiendo utilizar el cuerpo de la petición

@@ -78,12 +78,12 @@ const login = async (req: Request, res: Response): Promise<any> => {
       token
     })
   } catch (error) {
-    const err = error as Error
-    res.status(500).json({
-      success: false,
-      message: err.message
-    })
-  }
+  console.error("Error en login:", error);
+  res.status(500).json({
+    success: false,
+    message: error instanceof Error ? error.message : "Error desconocido"
+  });
+}
 }
 
 export { register, login }

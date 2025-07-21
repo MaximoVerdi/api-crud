@@ -1,12 +1,20 @@
 import { Router } from "express"
-import { addNewProduct, getAllProducts, deleteProduct, updateProduct } from "../controllers/productController"
+import {
+  getAllProducts,
+  addNewProduct,
+  deleteProduct,
+  updateProduct,
+  searchProductsByName
+} from "../controllers/productController"
 
 const productRouter = Router()
 
-// manejar las peticiones para los productos
 productRouter.get("/", getAllProducts)
 productRouter.post("/", addNewProduct)
-productRouter.patch("/:id", updateProduct)
 productRouter.delete("/:id", deleteProduct)
+productRouter.put("/:id", updateProduct)
+
+// Ruta para búsqueda por nombre
+productRouter.get("/search", searchProductsByName)
 
 export { productRouter }
