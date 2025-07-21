@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react"
 import { Layout } from "../components/Layout"
-import { getProducts, deleteProduct } from "../services/products"
+import { getProducts, deleteProduct, searchProductsByName } from "../services/products"
 import { useAuth } from "../context/AuthContext"
 
 const Home = () => {
   const [products, setProducts] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+
 
   const { user } = useAuth()
 
-  const fetchProducts = async () => {
-    const response = await getProducts()
-    const responseToJson = await response.json()
-
-    if (response.ok) {
-      setProducts(responseToJson.data)
+  const fetchProducts = async (search = "") => {
+    if (search.trim() === "") {
+      const response = await getProducts()
+      const responseToJson = await response.json()
+    
+      if (response.ok) {
+        setProducts(responseToJson.data)
+      }
+    } else {
+      const data = await searchProductsByName(search)
+      setProducts(data)
     }
   }
 
@@ -30,11 +37,28 @@ const Home = () => {
   }
 
   useEffect(() => {
-    fetchProducts()
-  }, [])
+      fetchProducts()
+    }, [])
+
+    useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchProducts(searchTerm)
+    }, 300) // debounce 300ms para evitar muchas llamadas
+
+    return () => clearTimeout(delayDebounce)
+  }, [searchTerm])
+
 
   return (
     <Layout>
+      <input
+        type="text"
+        placeholder="Buscar productos por nombre"
+        value={searchTerm}
+        onChange={e => {
+          setSearchTerm(e.target.value)
+        }}
+      />
       <h1>Bienvenido a nuestra tienda de productos artesanales</h1>
       <p>Descubrí nuestra selección exclusiva de productos únicos hechos a mano. Calidad y diseño en cada detalle.</p>
       <section>
