@@ -95,7 +95,7 @@ GET /api/products/search?name=alfajor
 
 ```env
 PORT=1234
-MONGO_URI=mongodb://localhost:27017/tienda-artesanal
+MONGO_URI=mongodb://localhost:27017/api-crud
 JWT_SECRET=tu_clave_secreta
 ```
 
